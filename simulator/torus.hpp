@@ -17,6 +17,7 @@ namespace GaussSim
     public:
         Torus() { std::fill(coordinate.begin(), coordinate.end(), static_cast<R>(0)); }
         Torus(array<R, n> coor) : coordinate(coor) { adjust(); }
+        Torus(bool noAdjust) : noAdjust(noAdjust) {}
         Torus(array<R, n> coor, bool noAdjust) : coordinate(coor), noAdjust(noAdjust) { adjust(); }
         Torus(const Torus<R, n> &torus) : coordinate(torus.coordinate), noAdjust(torus.noAdjust) {}
         Torus(const Torus<R, n> &torus, bool noAdjust) : coordinate(torus.coordinate), noAdjust(noAdjust) {}

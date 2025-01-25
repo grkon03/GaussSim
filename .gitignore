@@ -1,4 +1,5 @@
-*.cpp 
 *.out
 .vscode
-!sample.cpp
+
+# exclude experimental folder
+_expr_*/

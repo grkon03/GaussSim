@@ -5,9 +5,11 @@
 #include <vector>
 #include <functional>
 #include <random>
+#include <tuple>
 
 namespace GaussSim
 {
+    using std::tuple;
     using std::vector;
 
     // generalized gauss transformation
@@ -28,6 +30,7 @@ namespace GaussSim
         vector<array<NaturalNumber, n>> continuedFraction(Torus<R, n> target, size_t depth) const;
 
         double frequencyOfOrbit(Torus<R, n> rectBL, Torus<R, n> rectTR, Torus<R, n> initial, size_t depth) const;
+        double frequencyOfOrbit(Torus<R, n> rectBL, Torus<R, n> rectTR, vector<Torus<R, n>> _orbit) const;
         double frequencyOfRandomOrbits(Torus<R, n> rectBL, Torus<R, n> rectTR, size_t depth, size_t numOfExperiments) const;
 
         Torus<R, n> operator()(Torus<R, n> torus) const;
@@ -88,6 +91,33 @@ namespace GaussSim
         size_t timesOrbitComeToRect = 0;
 
         for (auto itr = orb.begin(); itr != orb.end(); ++itr)
+        {
+            in = true;
+            for (i = 0; i < n; ++i)
+            {
+                if (!(rectBL[i] <= (*itr)[i] && (*itr)[i] <= rectTR[i]))
+                {
+                    // if not in the set
+                    in = false;
+                    break;
+                }
+            }
+            if (in)
+                ++timesOrbitComeToRect;
+        }
+
+        return (double)timesOrbitComeToRect / depth;
+    }
+
+    template <Real R, size_t n>
+    double GGT<R, n>::frequencyOfOrbit(Torus<R, n> rectBL, Torus<R, n> rectTR, vector<Torus<R, n>> _orbit) const
+    {
+        size_t depth = _orbit.size();
+        int i;
+        bool in;
+        size_t timesOrbitComeToRect = 0;
+
+        for (auto itr = _orbit.begin(); itr != _orbit.end(); ++itr)
         {
             in = true;
             for (i = 0; i < n; ++i)
